@@ -5,47 +5,38 @@ let indicators = container.querySelector('.carousel-indicators').children
 let items = images.children
 let length = items.length
 let current = -1
+let slideInterval = null
 
 for(let i in items) {
     if(items[i].classList.contains('active')) {
         current = i
-        indicators[current].classList.add('active')
         break
     }
 }
 
 if (container.classList.contains('slide')){
-    setInterval (nextCarousel, 4000)
+    slideInterval = setInterval(nextCarousel, 4000)
+    container.addEventListener('mouseenter', () => {
+        clearInterval(slideInterval)
+    })
+    container.addEventListener('mouseleave', () => {
+        slideInterval = setInterval(nextCarousel, 4000)
+    })
 }
 
 if(sideButtons.length == 2){
-    for(let i in sideButtons){
-        if (sideButtons[i].classList.contains('carousel-btn-left')){
-            var btnLeft = sideButtons[i]
-            if(btnRight != undefined) {
-                addCarouselEvents()
-                break
-            }
-        }
-        if (sideButtons[i].classList.contains('carousel-btn-right')){
-            var btnRight = sideButtons[i]
-            if(btnLeft != undefined) {
-                addCarouselEvents()
-                break
-            }
-        }
-    }
+    var btnLeft = container.querySelector('.carousel-btn-left')
+    var btnRight = container.querySelector('.carousel-btn-right')
+    addCarouselEvents()
 }else{
     container.removeChild(sideButtons[0])
 }
 
 if(indicators.length == length){
-    for(let i = 0; i < indicators.length; i++){
+    indicators[current].classList.add('active')
+    for(let i = 0; i < length; i++){
         indicators[i].addEventListener('click', () => {
-            indicators[i].classList.add('active')
-            indicators[current].classList.remove('active')
-            items[i].classList.add('active')
-            items[current].classList.remove('active')
+            setActive(i)
             current = i
         })
     }
