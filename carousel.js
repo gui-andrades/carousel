@@ -5,7 +5,6 @@ let indicators = container.querySelector('.carousel-indicators').children
 let items = images.children
 let length = items.length
 let current = -1
-let slideInterval = null
 
 for(let i in items) {
     if(items[i].classList.contains('active')) {
@@ -46,6 +45,7 @@ if(indicators.length == length){
 }
 
 function setActive(n){
+    if(n == current) return
     items[current].classList.remove('active')
     items[n].classList.add('active')
     if(indicators){
