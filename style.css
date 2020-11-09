@@ -39,16 +39,19 @@
 }
 
 .carousel-images{
+    position: relative;
     height: 600px;
     width: 800px;
 }
 
 .carousel-item{
     display: none;
+    position: absolute;
+    top: 0;
 }
 
 .carousel-item.active{
-    display: block;
+    display: inline-block;
 }
 
 a{

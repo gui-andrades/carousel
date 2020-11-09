@@ -38,7 +38,7 @@ if(indicators.length == length){
     indicators[current].classList.add('active')
     for(let i = 0; i < length; i++){
         indicators[i].addEventListener('click', () => {
-            setActive(i)
+            setActive(i, '')
             current = i
         })
     }
@@ -49,23 +49,68 @@ if(indicators.length == length){
     sideButtons = null
 }
 
-function setActive(n){
+function setActive(n, dir){
     if(n == current) return
-    items[n].classList.add('active')
     if(indicators){
         indicators[n].classList.add('active')
         indicators[current].classList.remove('active')
     }
-    items[current].classList.remove('active')
+    let prev = current
+    if(dir == 'right'){
+        toRight(prev, n)
+    }else if(dir == 'left'){
+        toLeft(prev, n)
+    }else if(dir == ''){
+        if(n < current){
+            toRight(prev, n)
+        }
+        if(n > current){
+            toLeft(prev, n)
+        }
+    }
     current = n
+}
+
+function toRight(prev, n){
+    let timeR = 1
+    let transInterval = setInterval(() => {
+        items[current].style.left = `${timeR-100}%`
+        items[current].classList.add('active')
+        items[prev].style.left = `${timeR}%`
+        if(timeR >= 100){
+            clearStyle(prev)
+            clearInterval(transInterval)
+        }
+        timeR++
+    }, 5)
+}
+
+function toLeft(prev, n){
+    let timeL = 99
+    let transInterval = setInterval(() => {
+        items[current].style.left = `${timeL}%`
+        items[current].classList.add('active')
+        items[prev].style.left = `${timeL-100}%`
+        if(timeL <= 0){
+            clearStyle(prev)
+            clearInterval(transInterval)
+        }
+        timeL--
+    }, 5)
+}
+
+function clearStyle(prev){
+    items[current].removeAttribute('style')
+    items[prev].removeAttribute('style')
+    items[prev].classList.remove('active')
 }
 
 function nextCarousel(){
     let next = (current + 1) % length
-    setActive(next)
+    setActive(next, 'left')
 }
 
 function prevCarousel(){
     let prev = (current - 1 + length) % length
-    setActive(prev)
+    setActive(prev, 'right')
 }
